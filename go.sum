@@ -25,8 +25,8 @@ github.com/qustavo/dotsql v1.2.0/go.mod h1:uVmvLRJ7Yh/Z1Lcr9OTUP3ZToBScdcf05+WhX
 github.com/rs/xid v1.4.0/go.mod h1:trrq9SKmegXys3aeAKXMUTdJsYXVwGY3RLcfgqegfbg=
 github.com/rs/xid v1.5.0/go.mod h1:trrq9SKmegXys3aeAKXMUTdJsYXVwGY3RLcfgqegfbg=
 github.com/rs/zerolog v1.29.1/go.mod h1:Le6ESbR7hc+DP6Lt1THiV8CQSdkkNrd3R0XbEgp3ZBU=
-github.com/rs/zerolog v1.31.0 h1:FcTR3NnLWW+NnTwwhFWiJSZr4ECLpqCm6QsEnyvbV4A=
-github.com/rs/zerolog v1.31.0/go.mod h1:/7mN4D5sKwJLZQ2b/znpjC3/GQWY/xaDXUM0kKWRHss=
+github.com/rs/zerolog v1.32.0 h1:keLypqrlIjaFsbmJOBdB/qvyF8KEtCWHwobLp5l/mQ0=
+github.com/rs/zerolog v1.32.0/go.mod h1:/7mN4D5sKwJLZQ2b/znpjC3/GQWY/xaDXUM0kKWRHss=
 github.com/wisdom-oss/commonTypes v1.0.0 h1:+KuD3l+g1P6K2DwyC0nqo0RrpZdKiAoMLOBhQIce7WQ=
 github.com/wisdom-oss/commonTypes v1.0.0/go.mod h1:Q7X33dplhIdZxIbJRyTLhk9ojrDN6chq9D5xExToUEo=
 github.com/wisdom-oss/microservice-middlewares/v3 v3.0.1 h1:8iHbFRMtBA8bOp764LxvzG8vg70GYL1SllCQC3mM5d8=

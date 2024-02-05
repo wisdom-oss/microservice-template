@@ -8,7 +8,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
 	github.com/qustavo/dotsql v1.2.0
-	github.com/rs/zerolog v1.31.0
+	github.com/rs/zerolog v1.32.0
 	github.com/wisdom-oss/commonTypes v1.0.0
 	github.com/wisdom-oss/microservice-middlewares/v3 v3.0.1
 

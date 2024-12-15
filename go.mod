@@ -11,7 +11,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/qustavo/dotsql v1.2.0
 	github.com/rs/zerolog v1.33.0
-	github.com/wisdom-oss/common-go/v3 v3.0.0
+	github.com/wisdom-oss/common-go/v3 v3.1.0
 	github.com/wisdom-oss/go-healthcheck v1.0.2
 	openapi.tanna.dev/go/validator v0.4.0
 

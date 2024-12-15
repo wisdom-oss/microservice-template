@@ -17,8 +17,6 @@ github.com/gabriel-vasile/mimetype v1.4.7 h1:SKFKl7kD0RiPdbht0s7hFtjl489WcQ1VyPW
 github.com/gabriel-vasile/mimetype v1.4.7/go.mod h1:GDlAgAyIRT27BhFl53XNAFtfjzOkLaF35JdEG0P7LtU=
 github.com/getkin/kin-openapi v0.128.0 h1:jqq3D9vC9pPq1dGcOCv7yOp1DaEe7c/T1vzcLbITSp4=
 github.com/getkin/kin-openapi v0.128.0/go.mod h1:OZrfXzUfGrNbsKj+xmFBx6E5c6yH3At/tAKSc2UszXM=
-github.com/gin-contrib/logger v1.1.2 h1:+y8VHqn5zAsAFnW6y/6GF93eXaCPFv/XPdqUCFeBMRg=
-github.com/gin-contrib/logger v1.1.2/go.mod h1:IXV9/7UPRIPJpAZ0DUOAZ/NLaCVzOzqqpQPQEF7u6fw=
 github.com/gin-contrib/logger v1.2.2 h1:4vegTopx7ATxY4BB3yXr/jwMbFFQI2GO8/t6K/CPR/8=
 github.com/gin-contrib/logger v1.2.2/go.mod h1:PlPi0YnOQZ0mb8slpXbn9sivtpkp5rtfGHWgzPUnRWM=
 github.com/gin-contrib/requestid v1.0.3 h1:NB6SF0Te4Ikn8mW2K4tegpm2WGuB3bWj4wnWaM4oSAA=
@@ -127,8 +125,8 @@ github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS
 github.com/twitchyliquid64/golang-asm v0.15.1/go.mod h1:a1lVb/DtPvCB8fslRZhAngC2+aY1QWCk3Cedj/Gdt08=
 github.com/ugorji/go/codec v1.2.12 h1:9LC83zGrHhuUA9l16C9AHXAqEV/2wBQ4nkvumAE65EE=
 github.com/ugorji/go/codec v1.2.12/go.mod h1:UNopzCgEMSXjBc6AOMqYvWC1ktqTAfzJZUZgYf6w6lg=
-github.com/wisdom-oss/common-go/v3 v3.0.0 h1:hBjHv//jumY9p5cYhEWW91zGvcxPnmOhzLXJeTtGXcY=
-github.com/wisdom-oss/common-go/v3 v3.0.0/go.mod h1:WpLfiDfoPfgnbCTEAmvew3ilyu45upjm13hV/cQxIuk=
+github.com/wisdom-oss/common-go/v3 v3.1.0 h1:mc4jWnJrbqRLFL8yaZc/UQLh19cnYjrrkYXVzVutfLE=
+github.com/wisdom-oss/common-go/v3 v3.1.0/go.mod h1:WpLfiDfoPfgnbCTEAmvew3ilyu45upjm13hV/cQxIuk=
 github.com/wisdom-oss/go-healthcheck v1.0.2 h1:GB6XFXo1mO9GDcQwXrK6edH9x1qGxZB0JcL4y+tSYh4=
 github.com/wisdom-oss/go-healthcheck v1.0.2/go.mod h1:H2bLbrxhptz7EuK3SaW4HPVW7VF9C+UTeeWs7aLB5GE=
 golang.org/x/arch v0.12.0 h1:UsYJhbzPYGsT0HbEdmYcqtCv8UNGvnaL561NnIUvaKg=

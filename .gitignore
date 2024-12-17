@@ -18,6 +18,7 @@
 !.github/*.yaml
 !.github/workflows
 !.github/workflows/*.yaml
+!.github/workflows/*.yml
 
 # allow markdown files
 !*.md

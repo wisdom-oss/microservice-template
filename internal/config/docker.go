@@ -13,13 +13,13 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lestrrat-go/jwx/jwt"
 	"github.com/rs/zerolog"
 
 	"github.com/gin-contrib/logger"
 	"github.com/gin-contrib/requestid"
 
 	errorHandler "github.com/wisdom-oss/common-go/v3/middleware/gin/error-handler"
+	"github.com/wisdom-oss/common-go/v3/middleware/gin/jwt"
 	"github.com/wisdom-oss/common-go/v3/middleware/gin/recoverer"
 	"github.com/wisdom-oss/common-go/v3/types"
 )

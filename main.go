@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
+
 	healthcheckServer "github.com/wisdom-oss/go-healthcheck/server"
 
 	"microservice/internal"
@@ -18,8 +19,11 @@ import (
 	"microservice/routes"
 )
 
+var headerReadTimeout = 10 * time.Second
+var serverShutdownTimeout = 20 * time.Second
+
 // the main function bootstraps the http server and handlers used for this
-// microservice
+// microservice.
 func main() {
 	// create a new logger for the main function
 	l := log.Logger
@@ -42,8 +46,9 @@ func main() {
 
 	// create http server
 	server := &http.Server{
-		Addr:    config.ListenAddress,
-		Handler: r,
+		Addr:              config.ListenAddress,
+		Handler:           r,
+		ReadHeaderTimeout: headerReadTimeout,
 	}
 
 	l.Info().Msg("starting http server")
@@ -63,7 +68,7 @@ func main() {
 	l.Info().Msg("server ready to accept connections")
 	<-shutdownSignal
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), serverShutdownTimeout)
 	defer cancel()
 
 	err = server.Shutdown(ctx)

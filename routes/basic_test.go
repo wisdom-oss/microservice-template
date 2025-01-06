@@ -5,9 +5,11 @@ import (
 	"os"
 	"testing"
 
+	_ "github.com/joho/godotenv/autoload"
+
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gin-gonic/gin"
-	_ "github.com/joho/godotenv/autoload"
+
 	validator "openapi.tanna.dev/go/validator/openapi3"
 
 	_ "microservice/internal/db"

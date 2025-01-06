@@ -18,7 +18,10 @@ import (
 var contract *openapi3.T
 
 func TestMain(m *testing.M) {
-	var err error
+	err := os.Chdir("../")
+	if err != nil {
+		panic(err)
+	}
 	contract, err = openapi3.NewLoader().LoadFromFile("./openapi.yaml")
 	if err != nil {
 		panic(err)

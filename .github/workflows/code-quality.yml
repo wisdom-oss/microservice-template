@@ -1,13 +1,7 @@
 name: code-quality
 on:
   pull_request:
-    paths:
-      - "**/go.*"
-      - "**.go"
   push:
-    paths:
-      - "**/go.*"
-      - "**.go"
   schedule:
     - cron: '15 12 * * 5'
 

@@ -1,7 +1,6 @@
 {
     "files.exclude": {
-        ".hc-socket": true,
-        ".vscode": true,
+        ".hc-socket": true
     },
     "gopls": {
         "ui.semanticTokens": true

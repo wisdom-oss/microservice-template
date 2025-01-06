@@ -3,18 +3,21 @@
         {
             "name": "Debug",
             "type": "go",
+            "mode": "debug",
             "request": "launch",
-            "mode": "exec",
-            "program": "${workspaceFolder}/__debug_bin",
-            "preLaunchTask": "go: build (debug)"
+            "program": "${workspaceFolder}",
+            "hideSystemGoroutines": true,
+            "internalConsoleOptions": "openOnSessionStart"
         },
         {
-            "name": "Debug Release",
+            "name": "Debug (Docker Variant)",
             "type": "go",
+            "mode": "debug",
             "request": "launch",
-            "mode": "exec",
-            "program": "${workspaceFolder}/__docker_bin",
-            "preLaunchTask": "go: build (docker)"
+            "program": "${workspaceFolder}",
+            "hideSystemGoroutines": true,
+            "internalConsoleOptions": "openOnSessionStart",
+            "buildFlags": ["-tags=docker"]
         }
     ]
 }

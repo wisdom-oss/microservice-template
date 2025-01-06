@@ -33,8 +33,6 @@ jobs:
           PGPASSWORD: postgres
           PGHOST: localhost
           PGSSLMODE: disable
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   code-ql:
     runs-on: ubuntu-latest

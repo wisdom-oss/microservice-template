@@ -6,9 +6,11 @@ on:
     - cron: '15 12 * * 5'
 
 permissions:
-  contents: read
-  pull-requests: read
+  contents: write
+  pull-requests: write
   checks: write
+  issues: write
+
 
 jobs:
   tests:

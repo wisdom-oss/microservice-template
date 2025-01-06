@@ -33,7 +33,7 @@ jobs:
           go-version: stable
       - run: go install github.com/jstemmer/go-junit-report/v2@latest
       - env:
-          PGUSER: posrgres
+          PGUSER: postgres
           PGPASSWORD: postgres
           PGHOST: localhost
           PGSSLMODE: disable

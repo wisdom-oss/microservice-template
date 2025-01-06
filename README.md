@@ -2,9 +2,6 @@
 > [!CAUTION]
 > This repository either is the template for new microservices or this
 > repository has been generated from the template repository.
->
-> Please read the Architecture section thoroughly to minimize risks of data
-> leaking and unauthorized access.
 
 <div align="center">
 <img height="150px" src="https://raw.githubusercontent.com/wisdom-oss/brand/main/svg/standalone_color.svg">
@@ -24,102 +21,151 @@ API Schema Version"/></a>
 
 <!-- TODO: Replace README.md contents with correct description -->
 
+This repository contains a template for new microservices inside the WISdoM
+architecture.
+It already handles the connection to the database using the `internal/db` 
+package and the included `init` function in that package.
+To start writing a new microservice you only need to create the new routes in
+the `routes` directory and add them to the [`gin-gonic/gin`] router used in
+the project.
 
- 
-## Architecture
-The template repository contains the basic code fragments to configure and
-start up a new microservice.
-It is delivered with two basic routes showcasing the features of the template
-and the current packages included it.
+[`gin-gonic/gin`]: https://github.com/gin-gonic/gin
 
-This section explains some files and their function within the service to allow
-a better understanding of the service
+## Authorization
+The microservice automatically disables the authorization in local development
+scenarios to reduce the hassle with needing a living access token for each
+request.
+However, the authorization is enabled when building the Docker Image as it
+uses the `docker` build tag which triggers the inclusion of
+`internal/config/docker.go` and the exclusion of `internal/config/debug.go` into
+the binary.
 
-### [`init.go`](init.go) — The service initialization
-The `init.go` file contains the code required to connect the service to the
-PostgreSQL database used in the WISdoM system. It furthermore handles the
-automatic configuration of the environment variables by automatically loading
-environment variables stored in a `.env` file.
+> [!TIP]
+> To test the authorization you need to manually add the build tag to your build
+> command `-tags docker` and populate the `OIDC_AUTHORITY` environment variable
+> which should contain the issuer of the access tokens used in your WISdoM
+> platform, otherwise the startup of the microservice will fail or you may be
+> unable to access the microservice
 
-> [!CAUTION]
-> Never commit a file containing secrets like usernames, password, 
-> client _secrets_, client ids, connection urls that contain these values.
-
-### [`main.go`](main.go) — Main Application
-The `main.go` file contains the main part of the application. 
-In this case it is the setup of the healthcheck and the router used to manage
-the different routes and handlers.
-
-
-### [`globals`](globals) — Globally available variables and connections
-The package `globals` manages some variables that are used at places which would
-require importing each other resulting in a circular import.
-
-#### [`variables.go`](globals/variables.go) — Variables
-The `variables.go` file contains globally used variables that are used at
-multiple places in different packages.
-Furthermore, the `variables.go` file uses the [embedding of values] during the 
-build of the executable.
-
-[embedding of values]: https://pkg.go.dev/embed
-
+## Using the database
 > [!IMPORTANT]
-> To set the service's name and to allow a first build, please write the name of
-> the service into the `service-name.sample` file and rename this file to
-> `service-name`.
-> Otherwise, the build process will fail!
+> You need to set the following environment variables for a successful 
+> connection to the database:
+>   - `PGUSER`
+>   - `PGPASSWORD`
+>   - `PGHOST`
+>   - `PGDATABASE`
+>
+> and optionally the following variables
+>   - `PGPORT`
 
-#### [`connections.go`](globals/connections.go) — Connections
-The `connections.go` file contains globally used variables that are used at
-multiple places throughout the code.
+As the database is automatically connected, you don't need to handle this by
+yourself.
+To use the database in your code either request a single connection from the
+connection pool (`db.Pool.Acquire`) or pass the pool into a supported function
+(_recommended_)
 
-### [`resources`](resources) — Resources
-The `resources` folder contains resources needed for the service.
-In its bare state, the service requires the listed files
+Furthermore, all queries stored in the `resources` folder are embedded into
+the built executable and available in the `db.Queries` object, which is a
+[`qustavo/dotsql`] `DotSql` object which allows recalling queries by their name.
 
-#### [`environment.json`](resources/environment.json) — Environment Configuration
-The `environment.json` file contains information about the required and
-optional environment variables consumed by the service.
-For optional variables you need to specify a default value which is populated
-into the `globals.Environment` variable.
-The optional values may only be of the type `string` as this reflects the
-behavior of the `os.LookupEnv` function.
+[`qustavo/dotsql`]: https://github.com/qustavo/dotsql
 
+## Returning errors to End-Users
+Since the router already comes pre-configured with some error handling
+middleware, sending errors generated by other functions back to an end-user is 
+easy. 
+Just call `c.Abort()` and `c.Error()` in your handler and return from the 
+function.
+The end-user will automatically receive a [RFC 9457]-compliant error message
+generated from your output.
+The following example shows how to output an error and what the expected output
+should look like on the end-users side:
 
-#### [`queries.sql`](resources/queries.sql) — SQL Queries
-The `queries.sql` file contains all sql queries required for your service.
-The queries are loaded during the initialization of the service and are managed
-by the [`dotsql` package]
+```go
+package routes
 
-[`dotsql` package]: https://pkg.go.dev/github.com/qustavo/dotsql
+import "github.com/gin-gonic/gin"
 
-### [`config`](config) — Default configurations
-The `config` folder contains Go files which set default values for the 
-executable as constants or other variables.
-The different files are used in dependency of the [build tags] supplied during
-the compilation of the service.
+func BasicHandler(c *gin.Context) {
+	// ... your other code which generated an error
+	if err != nil {
+		c.Abort()
+		_ = c.Error(err)
+		return
+	}
 
-[build tags]: https://pkg.go.dev/cmd/go#hdr-Build_constraints
+}
 
-#### [`defaults.go`](config/defaults.go) - Local Development
-The `defaults.go` file is always used if the build tag `docker` is not supplied
-to the compiler.
-This default configuration automatically disables the authentication and
-authorization measures preconfigured to allow easy local development.
-It also sets the location of some required files to the `resources` folder to
-match the repository layout.
+```
 
-#### [`defaults.docker.go`](config/defaults.docker.go) - Deployment
-> [!NOTE]
-> This build tag is pre-set in the [Dockerfile](Dockerfile). Therefore, no
-> intervention is required.
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/problem+json; charset=utf-8
+X-Request-Id: 6215ec23-45f9-4182-b848-64a969e7d0c5
+Content-Length: 319
 
-The `defaults.docker.go` file is used if the build tag `docker` has been 
-supplied to the compiler.
-This configuration automatically enables the authentication and
-authorization measures preconfigured to secure the service in its deployed
-state.
-It also sets the location of some required files to lay directly next to the
-executable to allow a flatter folder structure in the generated docker
-image.
+[
+  {
+    "type": "https://www.rfc-editor.org/rfc/rfc9110#section-15.6.1",
+    "status": 500,
+    "title": "Internal Server Error",
+    "detail": "The service encountered an internal error during the handling of your request",
+    "instance": "tag:xxxxxxxx,2024-10-15:InternalServerError:1728985891",
+    "errors": [
+      "error"
+    ],
+    "host": "xxxxxxxx"
+  }
+]
+```
 
+If you want to send errors that are generated by your code and are predictable
+(for example, an object isn't found) should create a `types.ServiceError` for
+the error message and send that one back using `.Emit()` on the created
+`ServiceError` object
+
+```go
+package routes
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/wisdom-oss/common-go/v2/types"
+)
+
+var ObjectNotFoundError types.ServiceError = types.ServiceError{
+	Type:   "https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.5",
+	Status: http.StatusNotFound,
+	Title:  "Object Not Found",
+	Detail: "The requested object does not exist. Please check the object id",
+}
+
+func BasicHandler(c *gin.Context) {
+	// ... your other code possibly populating the object
+	if object == nil {
+		c.Abort()
+		ObjectNotFoundError.Emit(c)
+		return
+	}
+}
+
+```
+```
+HTTP/1.1 404 Not Found
+Content-Type: application/problem+json; charset=utf-8
+X-Request-Id: 82f0e83e-f485-4aca-8706-d0d57ee1585d
+Content-Length: 317
+
+{
+  "type": "https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.5",
+  "status": 404,
+  "title": "Object Not Found",
+  "detail": "The requested object does not exist. Please check the object id",
+  "instance": "tag:xxxxxxxx,2024-10-15:ObjectNotFound:1728986473",
+  "host": "xxxxxxxx"
+}
+```
+
+[RFC 9457]: https://www.rfc-editor.org/rfc/rfc9457.html

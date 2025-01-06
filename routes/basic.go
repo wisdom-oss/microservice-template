@@ -1,8 +1,12 @@
 package routes
 
-import "net/http"
+import (
+	"net/http"
 
-// BasicHandler contains just a response, that is used to show the templating
-func BasicHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("hello there"))
+	"github.com/gin-gonic/gin"
+)
+
+// BasicHandler contains just a response, that is used to show the templating.
+func BasicHandler(c *gin.Context) {
+	c.String(http.StatusOK, "hello there")
 }

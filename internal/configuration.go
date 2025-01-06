@@ -82,6 +82,7 @@ func initializeViperInstance() *viper.Viper {
 	instance := viper.New()
 	instance.SetConfigName("config")
 	instance.AddConfigPath("/etc/award/")
+	instance.AddConfigPath("/run/secrets/")
 	instance.AddConfigPath("$HOME/.config/award/")
 	instance.AddConfigPath(".")
 	instance.SetEnvPrefix("")

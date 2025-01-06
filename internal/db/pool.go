@@ -27,6 +27,15 @@ var (
 	ErrPoolPingFailed          = errors.New("unable to ping database via pool")
 )
 
+const (
+	KeyUser     = internal.ConfigKey_Postgres_User
+	KeyPassword = internal.ConfigKey_Postgres_Password
+	KeyHost     = internal.ConfigKey_Postgres_Host
+	KeyPort     = internal.ConfigKey_Postgres_Port
+	KeySSLMode  = internal.ConfigKey_Postgres_SSLMode
+	KeyDatabase = internal.ConfigKey_Postgres_Database
+)
+
 const pgSqlConnString = `user=%s password=%s host=%s port=%d sslmode=%s database=%s`
 
 func Connect() (err error) {
@@ -45,9 +54,9 @@ func Connect() (err error) {
 	}
 
 	connectionString := fmt.Sprintf(pgSqlConnString,
-		config.GetString("postgres.user"), config.GetString("postgres.password"),
-		config.GetString("postgres.host"), config.GetInt("postgres.port"),
-		config.GetString("postgres.sslmode"), config.GetString("postgres.database"),
+		config.GetString(KeyUser), config.GetString(KeyPassword),
+		config.GetString(KeyHost), config.GetInt(KeyPort),
+		config.GetString(KeySSLMode), config.GetString(KeyDatabase),
 	)
 	slog.Debug("generated connection string", "connString", connectionString)
 

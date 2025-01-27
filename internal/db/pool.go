@@ -41,7 +41,7 @@ const pgSqlConnString = `user=%s password=%s host=%s port=%d sslmode=%s database
 func Connect() (err error) {
 	slog.Info("initializing database connection")
 
-	config := internal.Configuration
+	config := internal.Configuration()
 
 	if !config.IsSet("postgres.host") {
 		return ErrNoDatabaseHost

@@ -17,7 +17,7 @@ func GenerateRouter() (*gin.Engine, error) {
 	gin.SetMode(gin.ReleaseMode)
 
 	/* Configure OpenID Connect */
-	authority := internal.Configuration.GetString(internal.ConfigKey_Oidc_Authority)
+	authority := internal.Configuration().GetString(internal.ConfigKey_Oidc_Authority)
 
 	jwtValidator := jwt.Validator{}
 	err := jwtValidator.Discover(authority)
@@ -25,7 +25,7 @@ func GenerateRouter() (*gin.Engine, error) {
 		return nil, err
 	}
 
-	if !internal.Configuration.GetBool(internal.ConfigKey_Require_Authorization) {
+	if !internal.Configuration().GetBool(internal.ConfigKey_Require_Authorization) {
 		jwtValidator.EnableOptional()
 	}
 

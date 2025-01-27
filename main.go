@@ -11,6 +11,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/spf13/viper"
+
 	"microservice/internal"
 	"microservice/internal/db"
 	"microservice/internal/router"
@@ -20,12 +22,13 @@ import (
 var headerReadTimeout = 10 * time.Second
 var serverShutdownTimeout = 20 * time.Second
 
-var configuration = internal.Configuration
+var configuration *viper.Viper
 
 // the main function bootstraps the http server and handlers used for this
 // microservice.
 func main() {
 	_ = internal.ParseConfiguration() // error ignored as function always returns nil
+	configuration = internal.Configuration()
 
 	// setting up the database connection
 	err := db.Connect()

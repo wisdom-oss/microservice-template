@@ -16,7 +16,7 @@ import (
 )
 
 // Configuration contains the parsed configuration file with the.
-var Configuration *viper.Viper
+var configuration *viper.Viper
 
 // Generic errors returned if something happened during the loading of the
 // configuration.
@@ -70,11 +70,17 @@ var envAliases = map[string][]string{
 // directory containing an examplatory configuration file (in the TOML format).
 // That configuration file needs to be edited to contain the correct values.
 func ParseConfiguration() error {
-	Configuration = initializeViperInstance()
-	setDefaults(Configuration)
-	bindEnvironmentVariables(Configuration)
-	_ = Configuration.ReadInConfig()
+	configuration = initializeViperInstance()
+	setDefaults(configuration)
+	bindEnvironmentVariables(configuration)
+	_ = configuration.ReadInConfig()
 	return nil
+}
+
+// Configuration returns the unexported [*viper.Viper] variable to allow using
+// the parsed configuration.
+func Configuration() *viper.Viper {
+	return configuration
 }
 
 // initializeViperInstance creates a new [*viper.Viper] instance.

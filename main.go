@@ -3,60 +3,68 @@ package main
 import (
 	"context"
 	"errors"
+	"log/slog"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
-	"github.com/rs/zerolog/log"
-
-	healthcheckServer "github.com/wisdom-oss/go-healthcheck/server"
+	"github.com/spf13/viper"
 
 	"microservice/internal"
-	"microservice/internal/config"
 	"microservice/internal/db"
+	"microservice/internal/router"
 	"microservice/routes"
 )
 
 var headerReadTimeout = 10 * time.Second
 var serverShutdownTimeout = 20 * time.Second
 
+var configuration *viper.Viper
+
 // the main function bootstraps the http server and handlers used for this
 // microservice.
 func main() {
-	// create a new logger for the main function
-	l := log.Logger
-	l.Info().Msgf("configuring %s service", internal.ServiceName)
+	_ = internal.ParseConfiguration() // error ignored as function always returns nil
+	configuration = internal.Configuration()
 
-	// create the healthcheck server
-	hcServer := healthcheckServer.HealthcheckServer{}
-	hcServer.InitWithFunc(func() error {
-		// test if the database is reachable
-		return db.Pool.Ping(context.Background())
-	})
-	err := hcServer.Start()
+	// setting up the database connection
+	err := db.Connect()
 	if err != nil {
-		l.Fatal().Err(err).Msg("unable to start healthcheck server")
+		slog.Error("unable to connect to the database", "error", err)
+		os.Exit(1)
 	}
-	go hcServer.Run()
 
-	r := config.PrepareRouter()
+	// running database migrations stored in resources/migrations
+	err = db.MigrateDatabase()
+	if err != nil {
+		slog.Error("failed to execute database migrations", "error", err)
+		os.Exit(1)
+	}
+
+	// generating a router which
+	r, err := router.GenerateRouter()
+	if err != nil {
+		slog.Error("unable to create router", "error", err)
+		os.Exit(1)
+	}
+
+	// define routes from here on
 	r.GET("/", routes.BasicHandler)
 
-	// create http server
-	server := &http.Server{
-		Addr:              config.ListenAddress,
-		Handler:           r,
+	// create a http server to handle the requests
+	server := http.Server{
+		Addr:              net.JoinHostPort(configuration.GetString("http.host"), configuration.GetString("http.port")),
+		Handler:           r.Handler(),
 		ReadHeaderTimeout: headerReadTimeout,
 	}
-
-	l.Info().Msg("starting http server")
 
 	// Start the server and log errors that happen while running it
 	go func() {
 		if err := server.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
-			l.Fatal().Err(err).Msg("An error occurred while starting the http server")
+			slog.Error("unable to start http server", "error", err)
 		}
 	}()
 
@@ -65,7 +73,6 @@ func main() {
 	signal.Notify(shutdownSignal, syscall.SIGINT, syscall.SIGTERM)
 
 	// Block further code execution until the shutdown signal was received
-	l.Info().Msg("server ready to accept connections")
 	<-shutdownSignal
 
 	ctx, cancel := context.WithTimeout(context.Background(), serverShutdownTimeout)
@@ -73,7 +80,9 @@ func main() {
 
 	err = server.Shutdown(ctx)
 	if err != nil {
-		l.Fatal().Err(err).Msg("An error occurred while shutting down http server")
+		slog.Error("unable to shutdown api gracefully", "error", err)
+		slog.Error("forcing shutdown...")
+		return
 	}
 
 }

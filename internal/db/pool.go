@@ -16,7 +16,7 @@ import (
 
 // Pool is not initialized at the app startup and needs to be initiatized by
 // calling [Connect].
-var Pool *pgxpool.Pool
+var pool *pgxpool.Pool
 
 // Errors which are returned if the database configuration is not in order.
 var (
@@ -37,6 +37,10 @@ const (
 )
 
 const pgSqlConnString = `user=%s password=%s host=%s port=%d sslmode=%s database=%s`
+
+func Pool() *pgxpool.Pool {
+	return pool
+}
 
 func Connect() (err error) {
 	slog.Info("initializing database connection")
@@ -61,13 +65,13 @@ func Connect() (err error) {
 	slog.Debug("generated connection string", "connString", connectionString)
 
 	slog.Debug("initializing database pool with connection string", "connString", connectionString)
-	Pool, err = pgxpool.New(context.Background(), connectionString)
+	pool, err = pgxpool.New(context.Background(), connectionString)
 	if err != nil {
 		return fmt.Errorf("%s: %w", ErrPoolConfigurationFailed.Error(), err)
 	}
 
 	slog.Info("validating database connection")
-	if err := Pool.Ping(context.Background()); err != nil {
+	if err := pool.Ping(context.Background()); err != nil {
 		return fmt.Errorf("%s: %w", ErrPoolPingFailed.Error(), err)
 	}
 	return nil

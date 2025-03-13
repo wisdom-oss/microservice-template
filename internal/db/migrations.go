@@ -25,7 +25,7 @@ func MigrateDatabase() error {
 		return err
 	}
 
-	db := stdlib.OpenDBFromPool(Pool)
+	db := stdlib.OpenDBFromPool(Pool())
 
 	if err := goose.Up(db, "migrations"); err != nil {
 		return err

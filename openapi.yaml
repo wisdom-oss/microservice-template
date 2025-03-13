@@ -21,7 +21,7 @@ components:
       openIdConnectUrl: /api/auth/.well-known/openid-configuration
 
 paths:
-  /:
+  /v1/:
     get:
       responses:
         200:

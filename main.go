@@ -15,8 +15,7 @@ import (
 
 	"microservice/internal"
 	"microservice/internal/db"
-	"microservice/internal/router"
-	"microservice/routes"
+	"microservice/router"
 )
 
 var headerReadTimeout = 10 * time.Second
@@ -44,15 +43,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	// generating a router which
-	r, err := router.GenerateRouter()
+	// configure your router
+	r, err := router.Configure()
 	if err != nil {
 		slog.Error("unable to create router", "error", err)
 		os.Exit(1)
 	}
-
-	// define routes from here on
-	r.GET("/", routes.BasicHandler)
 
 	// create a http server to handle the requests
 	server := http.Server{

@@ -22,6 +22,7 @@ type configuration struct {
 	vaultClient *vault.Vault // client used to access a hashicorp vault
 	s           []string     // paths to the secrets to be read from the vault
 	dbRole      string
+	dbMount     string
 }
 
 func (c *configuration) Initialize() error {
@@ -118,7 +119,9 @@ func (c *configuration) RefreshDatabaseCredentials() error {
 		return errors.New("refreshing database credentials is only supported for vault configuration")
 	}
 
-	username, password, err := c.vaultClient.DatabaseCredentials("databases", c.dbRole)
+	c.dbMount = c.i.GetString(ConfigurationKey_DatabaseCredentialMount)
+
+	username, password, err := c.vaultClient.DatabaseCredentials(c.dbMount, c.dbRole)
 	if err != nil {
 		return fmt.Errorf("unable to set up dynamic database credentials: %w", err)
 	}

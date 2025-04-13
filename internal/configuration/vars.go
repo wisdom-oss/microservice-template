@@ -23,7 +23,9 @@ var environmentVariables = map[string][]string{
 		"POSTGRES_SSL_MODE", "DB_SSLMODE", "DB_SSL_MODE", "DATABASE_SSLMODE",
 		"DATABASE_SSL_MODE",
 	},
-	ConfigurationKey_HttpPort: {"HTTP_PORT"},
+	ConfigurationKey_HttpPort:              {"HTTP_PORT"},
+	ConfigurationKey_AuthorizationRequired: {"AUTH_REQUIRED", "AUTHORIZATION_REQUIRED"},
+	ConfigurationKey_OidcAuthority:         {"OIDC_AUTHORITY", "OIDC_ISSUER"},
 }
 
 var defaults = map[string]any{

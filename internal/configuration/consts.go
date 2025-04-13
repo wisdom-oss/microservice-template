@@ -32,4 +32,8 @@ const (
 
 	ConfigurationKey_HttpHost = "http.host"
 	ConfigurationKey_HttpPort = "http.port"
+
+	ConfigurationKey_OidcAuthority = "oidc.auhority"
+
+	ConfigurationKey_AuthorizationRequired = "authorization.required"
 )

@@ -3,7 +3,7 @@
 package router
 
 import (
-	"microservice/internal"
+	"microservice/internal/configuration"
 
 	"github.com/gin-gonic/gin"
 	"github.com/wisdom-oss/common-go/v3/middleware/gin/jwt"
@@ -17,7 +17,7 @@ func GenerateRouter() (*gin.Engine, error) {
 	gin.SetMode(gin.ReleaseMode)
 
 	/* Configure OpenID Connect */
-	authority := internal.Configuration().GetString(internal.ConfigKey_Oidc_Authority)
+	authority := configuration.Default.Viper().GetString(configuration.ConfigurationKey_OidcAuthority)
 
 	jwtValidator := jwt.Validator{}
 	err := jwtValidator.Discover(authority)
@@ -25,7 +25,7 @@ func GenerateRouter() (*gin.Engine, error) {
 		return nil, err
 	}
 
-	if !internal.Configuration().GetBool(internal.ConfigKey_Require_Authorization) {
+	if !configuration.Default.Viper().GetBool(configuration.ConfigurationKey_AuthorizationRequired) {
 		jwtValidator.EnableOptional()
 	}
 

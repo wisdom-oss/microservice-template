@@ -11,9 +11,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/spf13/viper"
-
-	"microservice/internal"
+	"microservice/internal/configuration"
 	"microservice/internal/db"
 	"microservice/router"
 )
@@ -21,13 +19,19 @@ import (
 var headerReadTimeout = 10 * time.Second
 var serverShutdownTimeout = 20 * time.Second
 
-var configuration *viper.Viper
-
 // the main function bootstraps the http server and handlers used for this
 // microservice.
 func main() {
-	_ = internal.ParseConfiguration() // error ignored as function always returns nil
-	configuration = internal.Configuration()
+
+	if err := configuration.Default.Initialize(); err != nil {
+		slog.Error("unable to initialize configuration", "error", err)
+		os.Exit(1)
+	}
+
+	if err := configuration.Default.Read(); err != nil {
+		slog.Error("unable to parse configuration", "error", err)
+		os.Exit(1)
+	}
 
 	// setting up the database connection
 	err := db.Connect()
@@ -50,9 +54,11 @@ func main() {
 		os.Exit(1)
 	}
 
+	c := configuration.Default.Viper()
+
 	// create a http server to handle the requests
 	server := http.Server{
-		Addr:              net.JoinHostPort(configuration.GetString("http.host"), configuration.GetString("http.port")),
+		Addr:              net.JoinHostPort(c.GetString(configuration.ConfigurationKey_HttpHost), c.GetString(configuration.ConfigurationKey_HttpPort)), //nolint:lll
 		Handler:           r.Handler(),
 		ReadHeaderTimeout: headerReadTimeout,
 	}

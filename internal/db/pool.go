@@ -8,7 +8,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"microservice/internal"
+	"microservice/internal/configuration"
 )
 
 // This file contains the connection to the database which is automatically
@@ -28,12 +28,12 @@ var (
 )
 
 const (
-	KeyUser     = internal.ConfigKey_Postgres_User
-	KeyPassword = internal.ConfigKey_Postgres_Password
-	KeyHost     = internal.ConfigKey_Postgres_Host
-	KeyPort     = internal.ConfigKey_Postgres_Port
-	KeySSLMode  = internal.ConfigKey_Postgres_SSLMode
-	KeyDatabase = internal.ConfigKey_Postgres_Database
+	KeyUser     = configuration.ConfigurationKey_DatabaseUser
+	KeyPassword = configuration.ConfigurationKey_DatabasePassword
+	KeyHost     = configuration.ConfigurationKey_DatabaseHost
+	KeyPort     = configuration.ConfigurationKey_DatabasePort
+	KeySSLMode  = configuration.ConfigurationKey_DatabaseSSLMode
+	KeyDatabase = configuration.ConfigurationKey_DatabaseName
 )
 
 const pgSqlConnString = `user=%s password=%s host=%s port=%d sslmode=%s database=%s`
@@ -45,15 +45,15 @@ func Pool() *pgxpool.Pool {
 func Connect() (err error) {
 	slog.Info("initializing database connection")
 
-	config := internal.Configuration()
+	config := configuration.Default.Viper()
 
-	if !config.IsSet("postgres.host") {
+	if !config.IsSet(KeyHost) {
 		return ErrNoDatabaseHost
 	}
-	if !config.IsSet("postgres.user") {
+	if !config.IsSet(KeyUser) {
 		return ErrNoDatabaseUser
 	}
-	if !config.IsSet("postgres.password") {
+	if !config.IsSet(KeyPassword) {
 		return ErrNoDatabasePassword
 	}
 
@@ -64,8 +64,13 @@ func Connect() (err error) {
 	)
 	slog.Debug("generated connection string", "connString", connectionString)
 
+	pgConfig, err := pgxpool.ParseConfig(connectionString)
+	if err != nil {
+		return fmt.Errorf("unable to parse database configuration string: %w", err)
+	}
+
 	slog.Debug("initializing database pool with connection string", "connString", connectionString)
-	pool, err = pgxpool.New(context.Background(), connectionString)
+	pool, err = pgxpool.NewWithConfig(context.Background(), pgConfig)
 	if err != nil {
 		return fmt.Errorf("%s: %w", ErrPoolConfigurationFailed.Error(), err)
 	}

@@ -8,6 +8,7 @@ import (
 
 	_ "github.com/dr4hcu5-jan/viper-vault/remote"
 	_ "github.com/dr4hcu5-jan/viper-vault/remote/vault"
+	"github.com/joho/godotenv"
 
 	"github.com/spf13/viper"
 
@@ -133,7 +134,7 @@ func (c *configuration) RefreshDatabaseCredentials() error {
 }
 
 func (c *configuration) initializeLocalReading() error {
-	//godotenv.Load()
+	_ = godotenv.Load(".env")
 	c.i.SetConfigName("config")
 	c.i.AddConfigPath("/etc/award/")
 	c.i.AddConfigPath("/run/secrets/")

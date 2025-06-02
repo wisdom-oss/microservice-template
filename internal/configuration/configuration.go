@@ -31,7 +31,7 @@ func (c *configuration) Initialize() error {
 
 	configurationType, set := os.LookupEnv(EnvConfigurationType)
 	if !set {
-		c.t = ConfigurationType_Local
+		configurationType = ConfigurationType_Local
 	}
 
 	switch configurationType {
@@ -133,6 +133,7 @@ func (c *configuration) RefreshDatabaseCredentials() error {
 }
 
 func (c *configuration) initializeLocalReading() error {
+	//godotenv.Load()
 	c.i.SetConfigName("config")
 	c.i.AddConfigPath("/etc/award/")
 	c.i.AddConfigPath("/run/secrets/")

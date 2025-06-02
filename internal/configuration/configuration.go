@@ -27,6 +27,7 @@ type configuration struct {
 }
 
 func (c *configuration) Initialize() error {
+	_ = godotenv.Load(".env")
 	c.i = viper.New()
 	c.setupDefaults()
 
@@ -134,7 +135,6 @@ func (c *configuration) RefreshDatabaseCredentials() error {
 }
 
 func (c *configuration) initializeLocalReading() error {
-	_ = godotenv.Load(".env")
 	c.i.SetConfigName("config")
 	c.i.AddConfigPath("/etc/award/")
 	c.i.AddConfigPath("/run/secrets/")

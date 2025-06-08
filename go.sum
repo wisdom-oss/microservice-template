@@ -241,5 +241,5 @@ modernc.org/memory v1.10.0/go.mod h1:/JP4VbVC+K5sU2wZi9bHoq2MAkCnrt2r98UGeSK7Mjw
 modernc.org/sqlite v1.37.0 h1:s1TMe7T3Q3ovQiK2Ouz4Jwh7dw4ZDqbebSDTlSJdfjI=
 modernc.org/sqlite v1.37.0/go.mod h1:5YiWv+YviqGMuGw4V+PNplcyaJ5v+vQd7TQOgkACoJM=
 nullprogram.com/x/optparse v1.0.0/go.mod h1:KdyPE+Igbe0jQUrVfMqDMeJQIJZEuyV7pjYmp6pbG50=
-openapi.tanna.dev/go/validator v0.4.0 h1:UYkfh6uZSXREHxB/dQ/ys3S9LfMdiECh2ibHR2mL3bo=
-openapi.tanna.dev/go/validator v0.4.0/go.mod h1:DKbsh408YpUt9hHgLjfSqmmPDMrxVDZgGV1sqbk5qOE=
+openapi.tanna.dev/go/validator v0.4.1 h1:IM/1x5FE91ZQylj5v4X+AgptCHs70WDOzT9c9wI3tCE=
+openapi.tanna.dev/go/validator v0.4.1/go.mod h1:4I7adreWMVmsGwQit0dc9dMegYORZWq9/auPP6UGC5w=

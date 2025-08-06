@@ -1,3 +1,5 @@
+//go:build !no_db
+
 package db
 
 import (

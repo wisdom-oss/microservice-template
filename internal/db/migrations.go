@@ -1,4 +1,4 @@
-//go:build !no_migrations
+//go:build !no_migrations && !no_db
 
 package db
 

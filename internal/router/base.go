@@ -55,5 +55,7 @@ func prepareRouter() *gin.Engine {
 		ErrRouteNotFound.Emit(c)
 	})
 
+	r.Any("/_/health", HealthcheckHandler)
+
 	return r
 }

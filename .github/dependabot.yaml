@@ -10,6 +10,6 @@ updates:
     target-branch: "main"
     directory: /
     commit-message:
-      prefix: "[deps] ⬆️"
+      prefix: "chore(deps)"
     labels:
       - "dependencies"

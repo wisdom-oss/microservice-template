@@ -34,6 +34,7 @@ func main() {
 	}
 
 	// setting up the database connection
+	slog.Info("initializing database connection")
 	err := db.Connect()
 	if err != nil {
 		slog.Error("unable to connect to the database", "error", err)

@@ -45,7 +45,6 @@ func Pool() *pgxpool.Pool {
 }
 
 func Connect() (err error) {
-	slog.Info("initializing database connection")
 
 	config := configuration.Default.Viper()
 
@@ -77,7 +76,6 @@ func Connect() (err error) {
 		return fmt.Errorf("%s: %w", ErrPoolConfigurationFailed.Error(), err)
 	}
 
-	slog.Info("validating database connection")
 	if err := pool.Ping(context.Background()); err != nil {
 		return fmt.Errorf("%s: %w", ErrPoolPingFailed.Error(), err)
 	}

@@ -5,13 +5,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"microservice/internal/db"
+	"microservice/internal/healthchecks"
 )
 
 // HealthcheckHandler is a function that is called if a call to /_/health is
 // being made.
 var HealthcheckHandler = func(c *gin.Context) {
-	if err := db.Pool().Ping(c); err != nil {
+	if err := healthchecks.Base(); err != nil {
 		c.String(http.StatusInternalServerError, "service health failed: %s", err)
 		return
 	}

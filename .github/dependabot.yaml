@@ -13,3 +13,10 @@ updates:
       prefix: "chore(deps)"
     labels:
       - "dependencies"
+    ignore:
+      - update-types:
+          - version-update:semver-major
+    groups:
+      golang-extensions:
+        patterns:
+          - "golang.org/x/*"

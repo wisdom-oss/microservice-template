@@ -12,7 +12,8 @@ require (
 	github.com/jackc/pgx/v5 v5.7.5
 	github.com/joho/godotenv v1.5.1
 	github.com/qustavo/dotsql v1.2.0
-	github.com/stretchr/testify v1.10.0
+	github.com/spf13/pflag v1.0.7
+	github.com/stretchr/testify v1.11.1
 	github.com/wisdom-oss/common-go/v3 v3.2.1
 	openapi.tanna.dev/go/validator v0.4.1
 )
@@ -44,7 +45,6 @@ require (
 	github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8 // indirect
 	github.com/spf13/afero v1.14.0 // indirect
 	github.com/spf13/cast v1.9.2 // indirect
-	github.com/spf13/pflag v1.0.7 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/time v0.12.0 // indirect
